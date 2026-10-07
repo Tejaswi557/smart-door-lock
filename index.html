@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Face Recognition Smart Door Lock & Access Monitoring</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Sidebar Navigation (Dark Blue Theme) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🔐</div>
+      <div class="brand-info">
+        <h1>SmartLock AI</h1>
+        <span>Access Controller</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigation Menu</div>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <a href="index.html">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="register.html">
+            <span class="nav-icon">👤</span>
+            <span>Face Registration</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="recognition.html">
+            <span class="nav-icon">👁️</span>
+            <span>Live Recognition</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="logs.html">
+            <span class="nav-icon">📋</span>
+            <span>Access Logs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html">
+            <span class="nav-icon">ℹ️</span>
+            <span>Project Information</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="hardware-disclaimer-badge">
+        <strong>Software Prototype</strong>
+        Runs 100% in client browser via LocalStorage. Physical hardware discussed in Future Scope.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">☰</button>
+        <div class="page-breadcrumb">
+          <h2>Access Monitoring Dashboard</h2>
+          <p>Face Recognition Based Smart Door Lock Prototype</p>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="system-clock-widget" id="systemLiveClock">--:--:--</div>
+        <div class="system-status-indicator">
+          <span class="status-dot active"></span>
+          <span style="font-size: 13px; font-weight: 600; color: #10b981;">Biometric Core Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <main class="content-body">
+      <!-- Door Status Banner (Software Prototype Simulation) -->
+      <section class="door-status-banner">
+        <div class="lock-visual-container">
+          <div class="lock-icon-orb locked" id="lockIconOrb">
+            <span class="icon">🔒</span>
+          </div>
+          <div class="lock-info-text">
+            <h3>
+              Electronic Door Status:
+              <span class="lock-badge-state state-locked" id="lockStatusBadge">LOCKED</span>
+              <span class="prototype-tag">Software Simulated</span>
+            </h3>
+            <p id="lockStatusText">Door Secured (Access Locked)</p>
+            <p id="lockUserSubtext" style="font-size: 12px; color: #64748b; margin-top: 2px;">
+              Standby mode: Authorized face authentication required to unlock.
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="recognition.html" class="btn btn-primary">
+            <span>👁️</span> Open Live Scanner
+          </a>
+          <a href="register.html" class="btn btn-secondary">
+            <span>➕</span> Enroll New Face
+          </a>
+        </div>
+      </section>
+
+      <!-- KPI Summary Cards Grid (Computed from LocalStorage) -->
+      <section class="stats-grid">
+        <div class="stat-card accent-yellow">
+          <div class="stat-icon-wrapper yellow">👤</div>
+          <div class="stat-data">
+            <div class="stat-value" id="statTotalUsers">0</div>
+            <div class="stat-label">Enrolled Identities</div>
+            <div class="stat-subtext">Stored in LocalStorage</div>
+          </div>
+        </div>
+
+        <div class="stat-card accent-blue">
+          <div class="stat-icon-wrapper blue">📈</div>
+          <div class="stat-data">
+            <div class="stat-value" id="statTodayEvents">0</div>
+            <div class="stat-label">Access Attempts Today</div>
+            <div class="stat-subtext">Live audit count</div>
+          </div>
+        </div>
+
+        <div class="stat-card accent-green">
+          <div class="stat-icon-wrapper green">✅</div>
+          <div class="stat-data">
+            <div class="stat-value" id="statGrantedToday">0</div>
+            <div class="stat-label">Authorized Grants</div>
+            <div class="stat-subtext">Verified identities</div>
+          </div>
+        </div>
+
+        <div class="stat-card accent-red">
+          <div class="stat-icon-wrapper red">⚠️</div>
+          <div class="stat-data">
+            <div class="stat-value" id="statDeniedToday">0</div>
+            <div class="stat-label">Denied / Unknown</div>
+            <div class="stat-subtext">Unrecognized faces</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Two Column Layout -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+        <!-- Recent Access Events Card -->
+        <div class="card" style="grid-column: span 2;">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">📋</div>
+              <div>
+                <h3 class="card-title">Recent Access Activity</h3>
+                <p class="card-subtitle">Real-time audit entries recorded from live scans</p>
+              </div>
+            </div>
+            <a href="logs.html" class="btn btn-secondary btn-sm">View All Logs</a>
+          </div>
+
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subject Identity</th>
+                    <th>Access Decision</th>
+                    <th>Confidence</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="recentLogsTableBody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+
+              <div id="recentLogsEmptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📝</div>
+                <h3>No Access Events Recorded Yet</h3>
+                <p>Register a face and start the live scanner to see real-time verification logs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Architecture & Prototype Information Summary -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">⚙️</div>
+              <div>
+                <h3 class="card-title">System Architecture</h3>
+                <p class="card-subtitle">Autonomous Client-Side Execution</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                <span style="font-size: 13px; color: #64748b;">Processing Core</span>
+                <span class="badge badge-info">100% Client-Side JS</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                <span style="font-size: 13px; color: #64748b;">Biometric Model</span>
+                <span class="badge badge-success">128-D Vector Distance</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                <span style="font-size: 13px; color: #64748b;">Data Persistence</span>
+                <span class="badge badge-neutral">Browser LocalStorage</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                <span style="font-size: 13px; color: #64748b;">Backend Server</span>
+                <span class="badge badge-neutral">None (Zero Cloud / Paid API)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 13px; color: #64748b;">Target Deployment</span>
+                <span class="badge badge-warning">GitHub Pages Compatible</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 20px; padding: 14px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 12px; color: #475569; line-height: 1.5;">
+              <strong style="color: #0f172a;">Academic Project Note:</strong>
+              This application functions as a self-contained software prototype. Access decisions are evaluated in the browser and recorded into LocalStorage without external databases.
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- JavaScript Dependencies -->
+<script src="js/storage.js"></script>
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

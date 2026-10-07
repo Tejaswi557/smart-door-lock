@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Information | Face Recognition Smart Door Lock</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🔐</div>
+      <div class="brand-info">
+        <h1>SmartLock AI</h1>
+        <span>Access Controller</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigation Menu</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="index.html">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="register.html">
+            <span class="nav-icon">👤</span>
+            <span>Face Registration</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="recognition.html">
+            <span class="nav-icon">👁️</span>
+            <span>Live Recognition</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="logs.html">
+            <span class="nav-icon">📋</span>
+            <span>Access Logs</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="about.html">
+            <span class="nav-icon">ℹ️</span>
+            <span>Project Information</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="hardware-disclaimer-badge">
+        <strong>Software Prototype</strong>
+        Academic Documentation & Architecture Specifications. Physical hardware outlined in Future Scope.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">☰</button>
+        <div class="page-breadcrumb">
+          <h2>Project Information & Technical Documentation</h2>
+          <p>Academic Project Specifications, System Architecture, and Future Hardware Scope</p>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="system-clock-widget" id="systemLiveClock">--:--:--</div>
+        <div class="system-status-indicator">
+          <span class="status-dot active"></span>
+          <span style="font-size: 13px; font-weight: 600; color: #10b981;">Documentation Hub</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <main class="content-body">
+      <div style="display: flex; flex-direction: column; gap: 28px; max-width: 1100px;">
+        
+        <!-- Project Title & Abstract Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">🎓</div>
+              <div>
+                <h3 class="card-title">Project Overview & Abstract</h3>
+                <p class="card-subtitle">Face Recognition Based Smart Door Lock and Access Monitoring System</p>
+              </div>
+            </div>
+            <span class="badge badge-warning">College Project Prototype</span>
+          </div>
+
+          <div class="card-body" style="font-size: 14px; color: var(--text-secondary); line-height: 1.7;">
+            <p style="margin-bottom: 14px;">
+              <strong>Abstract:</strong> Traditional security mechanisms such as mechanical keys, RFID badges, and numeric PIN pads are susceptible to physical theft, duplication, and unauthorized sharing. This project introduces a self-contained, browser-executed <strong>Face Recognition Based Smart Door Lock and Access Monitoring System</strong> that performs real-time contactless biometric identity verification entirely within client-side web technologies.
+            </p>
+            <p>
+              Operating strictly within the browser environment via the HTML5 Webcam API, client-side computer vision algorithms, and HTML5 LocalStorage, the application detects facial morphology, extracts high-dimensional biometric descriptors, calculates Euclidean distance metrics against an enrolled database, and triggers simulated electronic door unlock relays—all with <strong>zero reliance on cloud servers, Python backends, or third-party paid APIs</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- System Architecture Workflow -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">🔄</div>
+              <div>
+                <h3 class="card-title">System Architecture & Pipeline</h3>
+                <p class="card-subtitle">End-to-End Client-Side Biometric Pipeline</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="architecture-diagram">
+              <div class="flow-step">
+                <div class="flow-step-num">1</div>
+                <div class="flow-step-content">
+                  <h4>Video Stream Acquisition (Browser Webcam API)</h4>
+                  <p>The client requests video capture using <code>navigator.mediaDevices.getUserMedia()</code>. Video frames are streamed locally without leaving the device.</p>
+                </div>
+              </div>
+
+              <div class="flow-step">
+                <div class="flow-step-num">2</div>
+                <div class="flow-step-content">
+                  <h4>Spatial Detection & Face Localization</h4>
+                  <p>A canvas-based chrominance (YCbCr) and facial aspect analyzer isolates the subject's face coordinates and draws a responsive bounding box HUD.</p>
+                </div>
+              </div>
+
+              <div class="flow-step accent">
+                <div class="flow-step-num">3</div>
+                <div class="flow-step-content">
+                  <h4>128-Dimensional Biometric Descriptor Extraction</h4>
+                  <p>The normalized facial crop is processed into a 128-element mathematical feature vector (HOG orientation gradients and deep feature representations) capturing facial landmarks.</p>
+                </div>
+              </div>
+
+              <div class="flow-step accent">
+                <div class="flow-step-num">4</div>
+                <div class="flow-step-content">
+                  <h4>Euclidean Distance Matching Engine</h4>
+                  <p>The real-time query vector is compared against all registered identities stored in LocalStorage using Euclidean distance: <code>d(u,v) = &radic;&Sigma;(u<sub>i</sub> - v<sub>i</sub>)&sup2;</code>.</p>
+                </div>
+              </div>
+
+              <div class="flow-step">
+                <div class="flow-step-num">5</div>
+                <div class="flow-step-content">
+                  <h4>Access Decision, Software Relay Pulse & Audit Logging</h4>
+                  <p>If distance &le; threshold (0.55), status is set to <strong>GRANTED</strong>, triggering an unlocked state for 5 seconds and recording a timestamped audit log.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Specifications & Restrictions Table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">📊</div>
+              <div>
+                <h3 class="card-title">Technical Specifications</h3>
+                <p class="card-subtitle">Architectural Compliance & Technology Matrix</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Implementation Technology</th>
+                    <th>Operational Characteristics</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>User Interface & Styling</strong></td>
+                    <td>HTML5, CSS3, Modern Flexbox & Grid</td>
+                    <td>Responsive layout, Dark Blue Nav, Yellow Accent, Light Content Cards</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Camera Feed</strong></td>
+                    <td>Browser Webcam API (MediaDevices)</td>
+                    <td>Hardware-accelerated local video stream capture; zero plugins</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Face Recognition</strong></td>
+                    <td>Client-Side Biometric Feature Engine</td>
+                    <td>128-dimensional normalized descriptor vector & Euclidean matching</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Data Storage</strong></td>
+                    <td>Browser LocalStorage API</td>
+                    <td>Persistent client-side storage for enrolled users and access audit logs</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Audio Feedback</strong></td>
+                    <td>Web Audio API Synthesizer</td>
+                    <td>Pure mathematical oscillator chords for Access Granted & Denied chimes</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Backend & APIs</strong></td>
+                    <td>Zero Server / Zero Paid APIs</td>
+                    <td>No Python, No Flask, No Firebase, No MongoDB; 100% GitHub Pages deployable</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Future Scope: Physical Hardware Integration (Detailed Academic Discussion) -->
+        <div class="card" style="border: 2px solid var(--accent-yellow);">
+          <div class="card-header" style="background-color: #fffbeb;">
+            <div class="card-title-group">
+              <div class="card-title-icon" style="background-color: #fef3c7; color: #b45309;">🔮</div>
+              <div>
+                <h3 class="card-title" style="color: #92400e;">Future Scope: Physical Hardware Integration</h3>
+                <p class="card-subtitle">Conceptual Roadmap for Transforming Software Prototype into Hardware Deployment</p>
+              </div>
+            </div>
+            <span class="badge badge-warning">Future Roadmap</span>
+          </div>
+
+          <div class="card-body" style="font-size: 14px; color: var(--text-secondary); line-height: 1.7;">
+            <p style="margin-bottom: 16px;">
+              While this academic prototype is strictly implemented as a <strong>software-only prototype</strong> running inside the web browser, the modular software architecture is designed to interface with physical IoT hardware in future expansion phases:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 20px;">
+              <div style="padding: 16px; background-color: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h4 style="color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">1. Embedded Edge Controllers</h4>
+                <p style="font-size: 13px;">
+                  Deployment on single-board computers such as <strong>Raspberry Pi 4</strong> (running Chromium in kiosk mode) or an <strong>ESP32-CAM</strong> microcontroller configured as a dedicated edge camera client.
+                </p>
+              </div>
+
+              <div style="padding: 16px; background-color: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h4 style="color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">2. Actuation & Locking Mechanism</h4>
+                <p style="font-size: 13px;">
+                  Interfacing an electronic <strong>12V Solenoid Door Strike</strong> or <strong>Electromagnetic Lock (Maglock)</strong> powered by an external 12V 2A DC supply, switched through an optocoupled 5V relay module with a 1N4007 flyback diode.
+                </p>
+              </div>
+
+              <div style="padding: 16px; background-color: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h4 style="color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">3. Motion Detection & Power Optimization</h4>
+                <p style="font-size: 13px;">
+                  Integrating a <strong>PIR (Passive Infrared) Motion Sensor</strong> to trigger camera wakeup only when a human approaches the entryway, reducing continuous camera sensor draw and power consumption.
+                </p>
+              </div>
+
+              <div style="padding: 16px; background-color: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <h4 style="color: var(--text-primary); margin-bottom: 6px; font-size: 14px;">4. Hardware Bridge Communication</h4>
+                <p style="font-size: 13px;">
+                  Triggering physical unlock pulses from the browser via the <strong>Web Serial API</strong> (direct USB connection to microcontroller) or local IoT publish/subscribe protocols such as <strong>MQTT over WebSockets</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div style="padding: 14px; background-color: #f1f5f9; border-radius: 8px; border-left: 4px solid var(--primary-blue); font-size: 13px;">
+              <strong>Academic Clarity:</strong> In the current version, all physical lock signals are represented virtually by the application's software state machine, demonstrating complete end-to-end viability before physical fabrication.
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Information & Credits -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">🏛️</div>
+              <div>
+                <h3 class="card-title">Project Credits & Information</h3>
+                <p class="card-subtitle">Department of Computer Science & Engineering</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+              <div>
+                <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600;">Project Name</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">Smart Door Lock System</div>
+              </div>
+              <div>
+                <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600;">Domain</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">Computer Vision & Biometrics</div>
+              </div>
+              <div>
+                <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600;">Implementation Type</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">Autonomous Software Prototype</div>
+              </div>
+              <div>
+                <div style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600;">Hosting Compatibility</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">GitHub Pages (Zero Server)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- JavaScript Dependencies -->
+<script src="js/storage.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

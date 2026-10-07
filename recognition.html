@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Recognition | Face Recognition Smart Door Lock</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🔐</div>
+      <div class="brand-info">
+        <h1>SmartLock AI</h1>
+        <span>Access Controller</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigation Menu</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="index.html">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="register.html">
+            <span class="nav-icon">👤</span>
+            <span>Face Registration</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="recognition.html">
+            <span class="nav-icon">👁️</span>
+            <span>Live Recognition</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="logs.html">
+            <span class="nav-icon">📋</span>
+            <span>Access Logs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html">
+            <span class="nav-icon">ℹ️</span>
+            <span>Project Information</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="hardware-disclaimer-badge">
+        <strong>Software Prototype</strong>
+        Biometric matching runs client-side in real time. Access triggers software lock state.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">☰</button>
+        <div class="page-breadcrumb">
+          <h2>Live Face Recognition & Door Control</h2>
+          <p>Real-time biometric video feed and access verification engine</p>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="system-clock-widget" id="systemLiveClock">--:--:--</div>
+        <div class="system-status-indicator">
+          <span class="status-dot active"></span>
+          <span style="font-size: 13px; font-weight: 600; color: #10b981;">Scanner Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <main class="content-body">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px;">
+        
+        <!-- Left: Live Video Scanner Viewport -->
+        <div class="card" style="grid-column: span 1;">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">👁️</div>
+              <div>
+                <h3 class="card-title">Live Video Viewfinder</h3>
+                <p class="card-subtitle">Real-time facial vector matching loop</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <!-- Camera Status: ONLINE / OFFLINE -->
+              <span class="badge badge-danger" id="cameraStatusBadge">
+                <span class="status-dot" id="cameraStatusDot" style="background-color: #ef4444;"></span>
+                <span id="cameraStatusText">OFFLINE</span>
+              </span>
+              <!-- Face Presence Indicator -->
+              <span class="badge badge-neutral" id="facePresenceBadge">
+                <span id="facePresenceText">No Face</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding: 0;">
+            <div class="camera-card" style="border-radius: 0; border: none;">
+              <div class="camera-container" style="aspect-ratio: 4/3;">
+                <video id="recognitionVideo" class="camera-video" autoplay playsinline muted></video>
+                <canvas id="hudOverlayCanvas" class="camera-canvas"></canvas>
+                
+                <!-- Laser Scanning Beam -->
+                <div class="scanning-beam"></div>
+
+                <!-- Alignment Oval -->
+                <div class="face-alignment-oval" id="alignmentOval"></div>
+
+                <!-- Camera Permission / Error Banner -->
+                <div id="cameraErrorBanner" class="camera-error-banner" style="display: none;">
+                  <div class="camera-error-icon">⚠️</div>
+                  <h4 id="cameraErrorTitle">Camera Permission Blocked</h4>
+                  <p id="cameraErrorMessage">Camera access was denied. Please allow camera permissions in your browser address bar to proceed.</p>
+                  <div class="camera-error-actions">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnRetryCamera">🔄 Retry Connection</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnDismissError">Dismiss</button>
+                  </div>
+                </div>
+
+                <!-- Camera Inactive State -->
+                <div class="camera-placeholder" id="cameraPlaceholder">
+                  <div class="camera-placeholder-icon">👁️</div>
+                  <h3 style="color: #ffffff; font-size: 16px; margin-bottom: 6px;">Live Camera Feed Offline</h3>
+                  <p style="font-size: 13px; max-width: 320px;">Click "Start Camera" below to request webcam permissions and begin live face detection.</p>
+                </div>
+              </div>
+
+              <!-- Controls Bar with Distinct Start Camera & Stop Camera Buttons -->
+              <div class="camera-controls-bar">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-primary" id="btnStartCamera">
+                    📹 Start Camera
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btnStopCamera" disabled>
+                    ⏹️ Stop Camera
+                  </button>
+                </div>
+
+                <!-- Sensitivity Slider -->
+                <div style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-size: 12px;">
+                  <span>Sensitivity Threshold:</span>
+                  <input type="range" id="sensitivitySlider" min="0.40" max="0.70" step="0.01" value="0.55" style="width: 100px; accent-color: var(--accent-yellow);">
+                  <span id="sensitivityVal" style="font-family: var(--font-mono); color: var(--accent-yellow);">0.55</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer" style="font-size: 12px; color: #64748b;">
+            <span>ℹ️ Lower threshold is stricter (fewer false positives); higher threshold allows minor lighting variations.</span>
+          </div>
+        </div>
+
+        <!-- Right: Verification Decision & Simulated Lock Actuator -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          
+          <!-- Real-Time Decision Card -->
+          <div class="decision-panel status-scanning" id="decisionPanel">
+            <div class="decision-header">
+              <h3 class="decision-title" id="decisionTitle">
+                <span>💤</span> Scanner Offline
+              </h3>
+              <span class="badge badge-warning" id="decisionBadge">Standby</span>
+            </div>
+
+            <!-- User Profile Box -->
+            <div class="decision-user-profile" id="decisionUserProfile" style="display: none;">
+              <img id="decisionAvatar" src="" alt="Subject" class="decision-avatar">
+              <div class="decision-meta">
+                <h4 id="decisionUserName">--</h4>
+                <p id="decisionUserMeta">--</p>
+              </div>
+            </div>
+
+            <!-- Confidence Bar -->
+            <div class="confidence-meter">
+              <div class="meter-label-row">
+                <span>Biometric Match Confidence</span>
+                <span id="decisionConfidenceScore" style="font-family: var(--font-mono);">0%</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill" id="decisionMeterFill"></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 14px; font-size: 12px; color: #64748b; display: flex; justify-content: space-between;">
+              <span>Euclidean Distance:</span>
+              <strong id="decisionDistanceValue" style="font-family: var(--font-mono); color: #0f172a;">--</strong>
+            </div>
+          </div>
+
+          <!-- Software Prototype Door Lock Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div class="card-title-icon">🔓</div>
+                <div>
+                  <h3 class="card-title">Simulated Door Lock</h3>
+                  <p class="card-subtitle">Relay Pulse Simulation (Software Prototype)</p>
+                </div>
+              </div>
+              <span class="prototype-tag">Software Simulated</span>
+            </div>
+
+            <div class="card-body">
+              <div class="lock-visual-container" style="justify-content: flex-start;">
+                <div class="lock-icon-orb locked" id="lockIconOrb">
+                  <span class="icon">🔒</span>
+                </div>
+                <div class="lock-info-text">
+                  <h3>
+                    Lock Status: 
+                    <span class="lock-badge-state state-locked" id="lockStatusBadge">LOCKED</span>
+                  </h3>
+                  <p id="lockStatusText">Door Secured (Access Locked)</p>
+                  <p id="lockUserSubtext" style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                    Standby mode: Authorized face authentication required to unlock.
+                  </p>
+                </div>
+              </div>
+
+              <div style="margin-top: 20px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 12px; color: #475569; line-height: 1.5;">
+                <strong>Lock Relay Simulation Logic:</strong> When a face matches a registered user with distance &le; threshold, the software triggers an unlocked pulse for 5 seconds before automatically relocking. Every event is written directly to the Audit Log.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- JavaScript Dependencies -->
+<script src="js/storage.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/face-engine.js"></script>
+<script src="js/app.js"></script>
+<script src="js/recognition.js"></script>
+</body>
+</html>

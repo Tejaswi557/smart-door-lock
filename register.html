@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Registration | Face Recognition Smart Door Lock</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🔐</div>
+      <div class="brand-info">
+        <h1>SmartLock AI</h1>
+        <span>Access Controller</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigation Menu</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="index.html">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="register.html">
+            <span class="nav-icon">👤</span>
+            <span>Face Registration</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="recognition.html">
+            <span class="nav-icon">👁️</span>
+            <span>Live Recognition</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="logs.html">
+            <span class="nav-icon">📋</span>
+            <span>Access Logs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html">
+            <span class="nav-icon">ℹ️</span>
+            <span>Project Information</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="hardware-disclaimer-badge">
+        <strong>Software Prototype</strong>
+        Biometric vectors are generated and securely stored in your browser's LocalStorage.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">☰</button>
+        <div class="page-breadcrumb">
+          <h2>Face Enrollment & Registration</h2>
+          <p>Register authorized personnel and compute facial biometric descriptors</p>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="system-clock-widget" id="systemLiveClock">--:--:--</div>
+        <div class="system-status-indicator">
+          <span class="status-dot active"></span>
+          <span style="font-size: 13px; font-weight: 600; color: #10b981;">Ready to Enroll</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <main class="content-body">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px;">
+        
+        <!-- Left Column: Camera Capture & Registration Form -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">📷</div>
+              <div>
+                <h3 class="card-title">Enrollment Camera Feed</h3>
+                <p class="card-subtitle">Position face inside oval guide for feature extraction</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="badge badge-danger" id="cameraStatusBadge">
+                <span class="status-dot" id="cameraStatusDot" style="background-color: #ef4444;"></span>
+                <span id="cameraStatusText">OFFLINE</span>
+              </span>
+              <div id="biometricStatusBadge">
+                <span class="badge badge-neutral">No Face</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding-bottom: 12px;">
+            <!-- Camera Viewport Card -->
+            <div class="camera-card">
+              <div class="camera-container">
+                <video id="registerVideo" class="camera-video" autoplay playsinline muted></video>
+                <canvas id="registerCanvas" class="camera-canvas"></canvas>
+                
+                <!-- Guidelines Oval -->
+                <div class="face-alignment-oval" id="alignmentOval"></div>
+
+                <!-- Snapshot Preview Box (shown after capture) -->
+                <div id="capturePreviewArea" style="display: none; position: absolute; inset: 0; background: #020617; align-items: center; justify-content: center; z-index: 20;">
+                  <img id="capturedFacePreview" src="" alt="Captured Face" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <!-- Camera Permission Error Banner -->
+                <div id="cameraErrorBanner" class="camera-error-banner" style="display: none;">
+                  <div class="camera-error-icon">⚠️</div>
+                  <h4 id="cameraErrorTitle">Camera Permission Blocked</h4>
+                  <p id="cameraErrorMessage">Camera access was denied. Please allow camera permissions in your browser address bar to proceed.</p>
+                  <div class="camera-error-actions">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnRetryCamera">🔄 Retry Connection</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnDismissError">Dismiss</button>
+                  </div>
+                </div>
+
+                <!-- Camera Offline State -->
+                <div class="camera-placeholder" id="cameraPlaceholder">
+                  <div class="camera-placeholder-icon">📷</div>
+                  <h3 style="color: #ffffff; font-size: 16px; margin-bottom: 6px;">Enrollment Camera Offline</h3>
+                  <p style="font-size: 13px; max-width: 320px;">Click "Start Camera" below to grant permission and initiate live face enrollment.</p>
+                </div>
+              </div>
+
+              <!-- Camera Controls Bar -->
+              <div class="camera-controls-bar">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-primary btn-sm" id="btnStartCamera">
+                    📹 Start Camera
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnStopCamera" disabled>
+                    ⏹️ Stop Camera
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm" id="btnCaptureFace" disabled>
+                    📸 Capture Face
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnRetake" style="display: none;">
+                    🔄 Retake
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enrollment Form -->
+            <form id="registrationForm" style="margin-top: 24px;">
+              <div class="form-group">
+                <label class="form-label" for="regName">Full Name <span class="required">*</span></label>
+                <input type="text" id="regName" class="form-control" placeholder="e.g., Alex Johnson" required>
+                <div class="form-helper">Legal name of the authorized user.</div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label" for="regRole">Role / Designation <span class="required">*</span></label>
+                  <select id="regRole" class="form-control">
+                    <option value="Student">Student</option>
+                    <option value="Faculty">Faculty</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Lab Admin">Lab Admin</option>
+                    <option value="Researcher">Researcher</option>
+                    <option value="Visitor">Visitor</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="regDept">Department <span class="required">*</span></label>
+                  <input type="text" id="regDept" class="form-control" placeholder="e.g., Computer Science" required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label" for="regIdNumber">Roll No. / Employee ID</label>
+                  <input type="text" id="regIdNumber" class="form-control" placeholder="e.g., CS-2026-44">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="regPrivilege">Access Level</label>
+                  <select id="regPrivilege" class="form-control">
+                    <option value="Standard">Standard (24/7 Access)</option>
+                    <option value="Elevated">Elevated (Admin)</option>
+                    <option value="Restricted">Restricted (Working Hours)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top: 10px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
+                  💾 Save & Enroll Authorized User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Registered Users Directory -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-title-icon">👥</div>
+              <div>
+                <h3 class="card-title">Enrolled Person Database</h3>
+                <p class="card-subtitle">Personnel authorized for facial unlock</p>
+              </div>
+            </div>
+            <span class="badge badge-info" id="userCountBadge">0</span>
+          </div>
+
+          <div class="card-body">
+            <!-- Search bar -->
+            <div class="search-input-group" style="margin-bottom: 20px;">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="userSearchInput" class="form-control" placeholder="Search by name, department, or ID...">
+            </div>
+
+            <!-- Users Grid / List -->
+            <div id="registeredUsersList" class="user-grid">
+              <!-- Dynamically populated by register.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- JavaScript Dependencies -->
+<script src="js/storage.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/face-engine.js"></script>
+<script src="js/app.js"></script>
+<script src="js/register.js"></script>
+</body>
+</html>
